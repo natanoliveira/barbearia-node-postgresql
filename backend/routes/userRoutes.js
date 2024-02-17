@@ -4,8 +4,8 @@ const UserController = require('../controllers/userController');
 
 // Rota para registrar um novo usuário
 router.post('/register', UserController.register);
-
 // Rota para autenticar um usuário
 router.post('/login', UserController.login);
+router.get('/', UserController.list);
 
 module.exports = router;

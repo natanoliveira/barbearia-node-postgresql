@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const authConfig = require('../configs/authConfig.json');
 
-function authMiddleware(req, res, next) {
+module.exports = (req, res, next) => {
+    // console.log('ENTREI NO MIDDLEWARE ==> \n', req)
     // Verificar se o token JWT está presente nos cabeçalhos da requisição
     const authHeader = req.headers.authorization;
 
@@ -9,10 +11,24 @@ function authMiddleware(req, res, next) {
     }
 
     // Extrair o token do cabeçalho da autorização
-    const token = authHeader.split(' ')[1];
+    // const token = authHeader.split(' ')[1];
+    const parts = authHeader.split(' ');
+
+    if (!parts.length === 2) {
+        return res.status(401).send({ message: "Token incompleto" })
+    }
+
+    const [scheme, token] = parts;
+
+    const regex = !/^Bearer$/i
+
+    // Sem esquema
+    if (!/^Bearer$/i.test(scheme)) {
+        return res.status(401).send({ message: "Token mal formado" })
+    }
 
     // Verificar se o token é válido
-    jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
+    jwt.verify(token, authConfig.secret, (error, decoded) => {
         if (error) {
             return res.status(401).json({ error: 'Token de autenticação inválido' });
         }
@@ -25,4 +41,4 @@ function authMiddleware(req, res, next) {
     });
 }
 
-module.exports = authMiddleware;
+// module.exports = authMiddleware;

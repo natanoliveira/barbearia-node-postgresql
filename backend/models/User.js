@@ -7,6 +7,10 @@ const User = sequelize.define('User', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -15,7 +19,22 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    createdAt: {
+        field: 'createdAt',
+        type: DataTypes.DATE,
+        defaultValue: sequelize.fn('now')
+    },
+    updatedAt: {
+        field: 'updatedAt',
+        type: DataTypes.DATE,
+    },
+    lastAcess: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+}, {
+    "timestamps": false
 });
 
 module.exports = User;

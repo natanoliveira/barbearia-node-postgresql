@@ -19,7 +19,17 @@ const Client = sequelize.define('Client', {
     phone: {
         type: DataTypes.STRING,
         allowNull: false
-    }
-});
+    },
+    createdAt: {
+        field: 'createdAt',
+        type: DataTypes.DATE,
+        defaultValue: sequelize.fn('now')
+    },
+    updatedAt: {
+        field: 'updatedAt',
+        type: DataTypes.DATE,
+    },
+},
+    { "timestamps": false });
 
 module.exports = Client;
