@@ -22,7 +22,16 @@ const Appointment = sequelize.define('Appointment', {
     serviceId: {
         type: DataTypes.UUID,
         allowNull: false
-    }
-});
+    },
+    createdAt: {
+        field: 'createdAt',
+        type: DataTypes.DATE,
+        defaultValue: sequelize.fn('now')
+    },
+    updatedAt: {
+        field: 'updatedAt',
+        type: DataTypes.DATE,
+    },
+}, { "timestamps": false });
 
 module.exports = Appointment;

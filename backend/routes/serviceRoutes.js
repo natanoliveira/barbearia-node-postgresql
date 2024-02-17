@@ -7,8 +7,9 @@ router.use(authMiddleware);
 
 // Rota para criar um novo serviço
 router.post('/', ServiceController.create);
-
-// Rota para obter todos os serviços
-router.get('/', ServiceController.getAll);
+router.get('/', ServiceController.list);
+router.get('/:id', ServiceController.show);
+router.put('/:id', ServiceController.update);
+router.delete('/:id', ServiceController.delete);
 
 module.exports = router;

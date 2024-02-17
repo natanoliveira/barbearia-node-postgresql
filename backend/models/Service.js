@@ -14,7 +14,16 @@ const Service = sequelize.define('Service', {
     price: {
         type: DataTypes.FLOAT,
         allowNull: false
-    }
-});
+    },
+    createdAt: {
+        field: 'createdAt',
+        type: DataTypes.DATE,
+        defaultValue: sequelize.fn('now')
+    },
+    updatedAt: {
+        field: 'updatedAt',
+        type: DataTypes.DATE,
+    },
+}, { "timestamps": false });
 
 module.exports = Service;

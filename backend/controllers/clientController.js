@@ -105,7 +105,7 @@ const ClientController = {
         const { id } = req.params;
 
         try {
-            // Verificar se o usuário existe
+            // Verificar se o cliente existe
             const client = await Client.findByPk(id);
 
             if (!client) {

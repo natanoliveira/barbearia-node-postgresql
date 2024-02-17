@@ -117,6 +117,19 @@ const helpers = {
         return true;
     },
 
+    convertCurrency(valorEmMoeda) {
+        // Remove os caracteres não numéricos (pontos, vírgulas e espaços)
+        const valorLimpo = valorEmMoeda.replace(/[^\d,]/g, '');
+
+        // Substitui a vírgula decimal por ponto
+        const valorComPonto = valorLimpo.replace(',', '.');
+
+        // Converte o valor para float
+        const valorFloat = parseFloat(valorComPonto);
+
+        return valorFloat;
+    },
+
 };
 
 module.exports = helpers;
