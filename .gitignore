@@ -1,3 +1,4 @@
 backend/node_modules
 backend/.env
+backend/configs/authConfig.json
 .DS_Store
