@@ -2,10 +2,10 @@ const Client = require('../models/Client');
 const helpers = require('../utils/helpers');
 
 const ClientController = {
-    // Criar um novo cliente
+
     async create(req, res) {
 
-        const { name, email, phone } = req.body;
+        const { name, email, phone, born } = req.body;
 
         try {
 
@@ -20,18 +20,29 @@ const ClientController = {
                 return res.status(400).send({ message: validPhone });
             }
 
+            if (!helpers.validateBorn(born)) {
+                return res.status(400).send({ message: "Data de nascimento inválida" });
+            }
+
+            if (helpers.formatDate(born) == null) {
+                return res.status(400).send({ message: "Data de nascimento inválida/mal formada" });
+            }
+
             // Vamos verificar se existe o cliente com om esmo email
             const data = await Client.findOne({ where: { email: email } });
 
             if (data) {
-                return res.status(400).send({ message: "Cliente já cadastrado para este e-mail", data });
+                return res.status(400).send({ message: "Cliente já cadastrado para este e-mail" });
             }
 
             const client = await Client.create({
                 name: name.toUpperCase(),
                 email: email,
-                phone: phone
+                phone: phone,
+                born: helpers.formatDate(born),
             });
+
+            client.age = helpers.getAge(born);
 
             res.status(201).json({ message: 'Cliente criado com sucesso', client });
         } catch (error) {
@@ -39,10 +50,9 @@ const ClientController = {
         }
     },
 
-    // Obter todos os clientes
     async list(req, res) {
         try {
-            const clients = await Client.findAll({ attributes: { exclude: ['password'] } });
+            const clients = await Client.findAll();
 
             res.status(200).json({ data: clients });
         } catch (error) {
@@ -64,7 +74,7 @@ const ClientController = {
 
     async update(req, res) {
         const { id } = req.params;
-        const { name, email, phone } = req.body;
+        const { name, email, phone, born } = req.body;
 
         try {
 
@@ -79,6 +89,14 @@ const ClientController = {
                 return res.status(400).send({ message: validPhone });
             }
 
+            if (!helpers.validateBorn(born)) {
+                return res.status(400).send({ message: "Data de nascimento inválida" });
+            }
+
+            if (helpers.formatDate(born) == null) {
+                return res.status(400).send({ message: "Data de nascimento inválida/mal formada" });
+            }
+
             // Vamos verificar se existe o cliente com om esmo email
             const client = await Client.findOne({ where: { id: id } });
 
@@ -91,8 +109,13 @@ const ClientController = {
             client.name = newName;
             client.email = email;
             client.phone = phone;
+            client.born = helpers.formatDate(born);
+            client.updatedAt = new Date();
 
             await client.save();
+
+            // Adicionando o elemento de idade dentro do objeto de retorno
+            client.dataValues.age = helpers.getAge(helpers.formatDate(born));
 
             res.status(201).json({ message: 'Cliente atualizado com sucesso', client });
         } catch (error) {
@@ -122,7 +145,6 @@ const ClientController = {
             return res.status(500).json({ error: 'Erro ao excluir cliente' });
         }
     }
-
 
 };
 

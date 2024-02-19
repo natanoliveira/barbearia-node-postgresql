@@ -30,6 +30,7 @@ async function startServer() {
         // Sincronizar os modelos Sequelize com o banco de dados
         // await sequelize.sync({ alter: true });
         // await sequelize.sync();
+        // await sequelize.sync({ force: true });
 
         // Iniciar o servidor
         app.listen(PORT, () => {

@@ -1,3 +1,5 @@
+const constants = require('./constants');
+
 const helpers = {
     validateEmail(email) {
         // Verifica se o email não está vazio
@@ -73,7 +75,7 @@ const helpers = {
         return response;
     },
 
-    async validateCPF(cpf) {
+    validateCPF(cpf) {
         // Remove todos os caracteres que não são dígitos
         const cpfLimpo = cpf.replace(/\D/g, '');
 
@@ -129,6 +131,81 @@ const helpers = {
 
         return valorFloat;
     },
+
+    validateBorn(dataNascimento) {
+        // Verifica se a data de nascimento foi fornecida
+        if (!dataNascimento) {
+            return false;
+        }
+
+        // Verifica se a data de nascimento está no formato correto (DD/MM/AAAA)
+        const regexData = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!regexData.test(dataNascimento)) {
+            return false;
+        }
+
+        // Divide a data em dia, mês e ano
+        const [dia, mes, ano] = dataNascimento.split('/');
+
+        // Cria um objeto Date com a data de nascimento
+        const data = new Date(ano, mes - 1, dia); // Note que o mês é indexado em zero (janeiro é 0, fevereiro é 1, etc.)
+
+        // Verifica se a data de nascimento é válida
+        if (data.getFullYear() != ano || data.getMonth() + 1 != mes || data.getDate() != dia) {
+            return false;
+        }
+
+        // Verifica se a data de nascimento é anterior à data atual
+        const dataAtual = new Date();
+        if (data > dataAtual) {
+            return false;
+        }
+
+        // Só pode ser acima de 2 anos
+        if (dataAtual.getFullYear() - ano <= constants.IDADE_PERMITIDA) {
+            return false;
+        }
+
+        // Se todas as verificações passarem, a data de nascimento é considerada válida
+        return true;
+    },
+
+    formatDate(dataNascimento) {
+        // Verifica se a data de nascimento foi fornecida
+        if (!dataNascimento) {
+            return null; // Retorna null se a data não foi fornecida
+        }
+
+        // Verifica se a data de nascimento está no formato correto (DD/MM/AAAA)
+        const regexData = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!regexData.test(dataNascimento)) {
+            return null; // Retorna null se a data não está no formato correto
+        }
+
+        // Divide a data em dia, mês e ano
+        const [dia, mes, ano] = dataNascimento.split('/');
+
+        // Formata a data no formato YYYY-MM-DD
+        const dataFormatada = `${ano}-${mes}-${dia}`;
+
+        return dataFormatada;
+    },
+
+    getAge(dataNascimento) {
+        const dataAtual = new Date();
+        const nascimento = new Date(dataNascimento);
+
+        let idade = dataAtual.getFullYear() - nascimento.getFullYear();
+        const mesAtual = dataAtual.getMonth() + 1;
+        const mesNascimento = nascimento.getMonth() + 1;
+
+        // Verifica se ainda não fez aniversário este ano
+        if (mesAtual < mesNascimento || (mesAtual === mesNascimento && dataAtual.getDate() < nascimento.getDate())) {
+            idade--;
+        }
+
+        return idade;
+    }
 
 };
 

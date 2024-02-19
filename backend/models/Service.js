@@ -15,6 +15,14 @@ const Service = sequelize.define('Service', {
         type: DataTypes.FLOAT,
         allowNull: false
     },
+    serviceTime: {
+        type: DataTypes.TIME,
+        allowNull: true,
+    },
+    situation: {
+        type: DataTypes.ENUM('ACTIVE', 'INACTIVE'),
+        defaultValue: 'ACTIVE'
+    },
     createdAt: {
         field: 'createdAt',
         type: DataTypes.DATE,

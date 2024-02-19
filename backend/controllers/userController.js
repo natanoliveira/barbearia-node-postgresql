@@ -10,7 +10,7 @@ function generateToken(params = {}) {
 }
 
 const UserController = {
-    // Cadastrar um novo usuário
+
     async register(req, res) {
 
         console.log(req.body);
@@ -48,7 +48,6 @@ const UserController = {
         }
     },
 
-    // Autenticar um usuário
     async login(req, res) {
         const { email, password } = req.body;
 

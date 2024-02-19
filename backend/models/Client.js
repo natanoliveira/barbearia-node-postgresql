@@ -20,6 +20,14 @@ const Client = sequelize.define('Client', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    born: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
+    situation: {
+        type: DataTypes.ENUM('ACTIVE', 'INACTIVE'),
+        defaultValue: 'ACTIVE'
+    },
     createdAt: {
         field: 'createdAt',
         type: DataTypes.DATE,

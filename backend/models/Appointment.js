@@ -11,6 +11,10 @@ const Appointment = sequelize.define('Appointment', {
         type: DataTypes.DATE,
         allowNull: false
     },
+    time: {
+        type: DataTypes.TIME,
+        allowNull: false
+    },
     userId: {
         type: DataTypes.UUID,
         allowNull: false
@@ -22,6 +26,11 @@ const Appointment = sequelize.define('Appointment', {
     serviceId: {
         type: DataTypes.UUID,
         allowNull: false
+    },
+    situation: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
     },
     createdAt: {
         field: 'createdAt',
