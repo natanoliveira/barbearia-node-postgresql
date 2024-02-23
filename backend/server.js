@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const morgan = require('morgan');
+const moment = require('moment-timezone');
 
 const sequelize = require('./database/database'); // Importe a instância do Sequelize
 
@@ -19,13 +20,22 @@ const swaggerDocument = require('./swagger/swagger.json');
 // Middleware para analisar corpos de solicitação JSON
 app.use(bodyParser.json());
 
+morgan.token('brDate', (req, res, tz) => {
+    const timestamp = new Date().getTime();
+    const brTimestamp = moment(timestamp).tz('America/Sao_Paulo');
+    // return brTimestamp.format('DD/MM/YYYY HH:mm:ss');
+    return brTimestamp;
+});
+
 app.use(morgan((tokens, req, res) => {
     return [
         tokens.method(req, res),
         tokens.url(req, res),
         tokens.status(req, res),
         tokens.res(req, res, 'content-length'), '-',
-        tokens['response-time'](req, res), 'ms'
+        tokens['response-time'](req, res), 'ms - ',
+        // tokens.date(req, res)
+        tokens.brDate(req, res)
     ].join(' ');
 }));
 

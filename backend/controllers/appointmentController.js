@@ -134,7 +134,49 @@ const AppointmentController = {
         } catch (error) {
             res.status(500).json({ error: 'Erro ao obter agendamentos' });
         }
-    }
+    },
+
+    async confirmation(req, res) {
+
+        const { id } = req.params;
+
+        try {
+
+            if (!id) {
+                return res.status(400).send({ message: "Agendamento não enviado" });
+            }
+
+            const condicao = {};
+            condicao.id = id;
+
+            const appointments = await Appointment.update({ confirmation: true }, { where: condicao });
+
+            res.status(200).json({ data: appointments });
+        } catch (error) {
+            res.status(500).json({ error: 'Erro ao obter agendamentos' });
+        }
+    },
+
+    async served(req, res) {
+
+        const { id } = req.params;
+
+        try {
+
+            if (!id) {
+                return res.status(400).send({ message: "Agendamento não enviado" });
+            }
+
+            const condicao = {};
+            condicao.id = id;
+
+            const appointments = await Appointment.update({ served: true }, { where: condicao });
+
+            res.status(200).json({ data: appointments });
+        } catch (error) {
+            res.status(500).json({ error: 'Erro ao obter agendamentos' });
+        }
+    },
 };
 
 module.exports = AppointmentController;
