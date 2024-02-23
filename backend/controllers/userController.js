@@ -13,7 +13,7 @@ const UserController = {
 
     async register(req, res) {
 
-        console.log(req.body);
+        // console.log(req.body);
 
         const { name, email, password } = req.body;
 
@@ -35,7 +35,7 @@ const UserController = {
                 password: hashedPassword
             });
 
-            console.log(user);
+            // console.log(user);
 
             user.password = undefined;
             user.updatedAt = undefined;

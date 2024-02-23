@@ -9,6 +9,10 @@ router.use(authMiddleware);
 router.post('/', AppointmentController.create);
 
 // Rota para obter todos os agendamentos
-router.get('/', AppointmentController.getAll);
+router.get('/', AppointmentController.list);
+router.get('/date', AppointmentController.listByDate);
+router.get('/date-service', AppointmentController.listByDateAndService);
+router.get('/date-service-client', AppointmentController.listByDateAndServiceAndClient);
+router.get('/client', AppointmentController.listByClient);
 
 module.exports = router;

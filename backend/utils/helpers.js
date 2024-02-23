@@ -205,7 +205,37 @@ const helpers = {
         }
 
         return idade;
-    }
+    },
+
+    validateDate(input) {
+        // Verifica se a data foi fornecida
+        if (!input) {
+            return false;
+        }
+
+        // Verifica se a data está no formato correto (DD/MM/AAAA)
+        // const regexData = /^\d{2}\/\d{2}\/\d{4}$/;
+        const regexData = /^\d{4}-\d{2}-\d{2}$/;
+
+        if (!regexData.test(input)) {
+            return false;
+        }
+
+        // Divide a data em dia, mês e ano
+        const [ano, mes, dia] = input.split('-');
+
+        // Cria um objeto Date com a data
+        const data = new Date(ano, mes - 1, dia); // Note que o mês é indexado em zero (janeiro é 0, fevereiro é 1, etc.)
+
+        // Verifica se a data é válida
+        if (data.getFullYear() != ano || data.getMonth() + 1 != mes || data.getDate() != dia) {
+            console.log('invalida');
+            return false;
+        }
+
+        // Se todas as verificações passarem, a data de nascimento é considerada válida
+        return true;
+    },
 
 };
 

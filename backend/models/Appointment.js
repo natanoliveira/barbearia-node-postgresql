@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/database');
+const Service = require('../models/Service');
+const Client = require('../models/Client');
 
 const Appointment = sequelize.define('Appointment', {
     id: {
@@ -8,7 +10,7 @@ const Appointment = sequelize.define('Appointment', {
         primaryKey: true
     },
     date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
     time: {
@@ -21,13 +23,26 @@ const Appointment = sequelize.define('Appointment', {
     },
     clientId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'Clients', // Nome do modelo de cliente
+            key: 'id'        // Nome do campo de chave primária em Client
+        }
     },
     serviceId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'Services', // Nome do modelo de serviço
+            key: 'id'         // Nome do campo de chave primária em Service
+        }
     },
-    situation: {
+    confirmation: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
+    served: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false
@@ -42,5 +57,8 @@ const Appointment = sequelize.define('Appointment', {
         type: DataTypes.DATE,
     },
 }, { "timestamps": false });
+
+Appointment.belongsTo(Service, { foreignKey: 'serviceId' });
+Appointment.belongsTo(Client, { foreignKey: 'clientId' });
 
 module.exports = Appointment;

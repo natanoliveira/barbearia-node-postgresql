@@ -30,14 +30,14 @@ module.exports = (req, res, next) => {
     // Verificar se o token é válido
     jwt.verify(token, authConfig.secret, (error, decoded) => {
         if (error) {
-            return res.status(401).json({ error: 'Token de autenticação inválido' });
+            return res.status(401).json({ message: 'Token de autenticação inválido' });
         }
 
         // Adicionar o ID do usuário decodificado à requisição para uso posterior
-        req.userId = decoded.userId;
+        req.userId = decoded.id;
 
         // Continuar para a próxima middleware
-        next();
+        return next();
     });
 }
 
