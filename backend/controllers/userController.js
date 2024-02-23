@@ -19,7 +19,7 @@ const UserController = {
 
         try {
 
-            const exists = await User.findOne({ email: email });
+            const exists = await User.findOne({ where: { email: email } });
 
             if (exists) {
                 return res.status(400).send({ message: "E-mail já existente" });
