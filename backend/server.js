@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const morgan = require('morgan');
 const moment = require('moment-timezone');
+const cors = require('cors')
 
 const sequelize = require('./database/database'); // Importe a instância do Sequelize
 
@@ -19,6 +20,23 @@ const swaggerDocument = require('./swagger/swagger.json');
 
 // Middleware para analisar corpos de solicitação JSON
 app.use(bodyParser.json());
+
+app.use(cors());
+
+app.use((req, res, next) => {//Cabeçalhos permitidos
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Auth-Token'
+    );
+
+    if (req.method === 'OPTIONS') {//Métdos permitidos
+        req.headers('Access-Control-Allow-Methods', 'PUT, POST, PATHC, DELETE, GET, post, get');
+        return res.status(200).send({});
+    }
+
+    next();
+})
 
 morgan.token('brDate', (req, res, tz) => {
     const timestamp = new Date().getTime();
